@@ -34,16 +34,17 @@ The project uses **tabular Q-learning**, a *model-free* Reinforcement Learning a
 
 The Q-table update rule is:
 
-[
-Q(s,a) \leftarrow Q(s,a) + \alpha \left[r + \gamma \max_{a'} Q(s', a') - Q(s,a)\right]
-]
+\[
+Q(s, a) = Q(s, a) + \alpha \left( r + \gamma \max_{a' \in A} Q(s', a') - Q(s, a) \right)
+\]
 
-Where:
-
-* `α` is the *learning rate*
-* `γ` is the *discount factor*
-* `r` is the immediate reward
-* `s'` is the next state
+where:
+- \( Q(s, a) \) is the current estimate of the action-value function
+- \( \alpha \) is the learning rate
+- \( r \) is the immediate reward
+- \( \gamma \) is the discount factor
+- \( s' \) is the next state
+- \( a' \) represents all possible actions in the next state
 
 ### Exploration Strategy
 
