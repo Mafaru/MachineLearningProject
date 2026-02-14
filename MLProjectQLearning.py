@@ -52,18 +52,10 @@ class Agent:
         # in both cases the indices of the actions (0-5) are returned because that's how they are encoded in the taxi v3 environment
     
     def update(self, state, action, reward, next_state):
-        """
-        Updates the Q-table using the Q-learning algorithm
-        
-        Args:
-            state: Current state
-            action: Action executed
-            reward: Reward received
-            next_state: Next state
-        """
-        td_target = reward + self.gamma * np.max(self.Q[next_state]) # applies the Q-learning formula to calculate the TD target, i.e., the sum of the immediate reward plus the discounted value of the best Q value in the next state
-        td_error = td_target - self.Q[state, action] # calculates the TD error which is the difference between the target and the current value
-        self.Q[state, action] += self.alpha * td_error # updates the Q value for the state and executed action using the TD error multiplied by the learning rate alpha
+       
+        """ Updates the Q-table using the Q-learning algorithm """
+         
+        self.Q[state, action] = reward + self.gamma * np.max(self.Q[next_state]) # the Q value for the current state and action is updated using the reward received and the maximum Q value of the next state, discounted by gamma. This is the core of the Q-learning algorithm, which updates the Q-table based on the observed rewards and the estimated future rewards.
     
     def decay_epsilon(self):
         """Applies decay to epsilon"""
