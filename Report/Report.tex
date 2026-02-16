@@ -1,0 +1,726 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Report},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{graphicx}
+\usepackage{float}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+
+\title{Report Project Machine Learning}
+\author{Mario Morra 2156770, Leonardo Sereni}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\hypertarget{project-objectives}{%
+\section{Project Objectives}\label{project-objectives}}
+
+The objective of this project is to design, implement, and analyze
+Reinforcement Learning agents based on the Q-learning framework. Two
+complementary approaches are considered: a tabular representation of the
+action-value function and a function approximation approach based on
+Deep Q-Networks (DQN).
+
+The main goals of the project are:
+
+\begin{itemize}
+\item
+  To formally model the selected environment as a Markov Decision
+  Process (MDP).
+\item
+  To implement the Q-learning algorithm in its tabular form, explicitly
+  representing the action-value function.
+\item
+  To extend the same learning principle to a neural-network-based
+  approximation through a Deep Q-Network.
+\item
+  To design and analyze an exploration strategy based on the
+  epsilon-greedy policy.
+\item
+  To investigate the convergence behavior and learning dynamics of both
+  approaches.
+\item
+  To evaluate and compare the learned policies in terms of performance,
+  stability, and generalization capability.
+\end{itemize}
+
+The tabular approach provides a clear and interpretable implementation
+of Q-learning in environments with finite and relatively small state
+spaces, such as Taxi-v3, where the action-value function can be stored
+explicitly. In contrast, the Deep Q-Network approach replaces the table
+with a parameterized function approximator, enabling scalability to
+larger or continuous state spaces.
+
+Together, these two implementations allow a comprehensive analysis of
+value-based reinforcement learning, highlighting both the theoretical
+foundations and the practical limitations of tabular methods, as well as
+the advantages introduced by neural network approximation.
+
+\hypertarget{environment-description}{%
+\section{Environment Description}\label{environment-description}}
+
+\hypertarget{environment-taxi-v3}{%
+\subsection{Environment: Taxi-v3}\label{environment-taxi-v3}}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{image.png}
+    \caption{Taxi-v3 environment visualization}
+    \label{fig:taxi-environment}
+\end{figure}
+The environment selected for this project is Taxi-v3, a classic
+benchmark environment provided by the Gymnasium library. It represents a
+discrete, fully observable, episodic Markov Decision Process.
+
+In this environment, a taxi agent operates in a 5×5 grid world. The task
+consists of:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Navigating to the passenger's location,
+\item
+  Executing a pickup action,
+\item
+  Navigating to the specified destination,
+\item
+  Executing a dropoff action.
+\end{enumerate}
+
+The state space consists of 500 discrete states. Each state encodes:
+
+\begin{itemize}
+\item
+  The taxi position (25 possible grid locations),
+\item
+  The passenger location (4 fixed locations or inside the taxi),
+\item
+  The destination location (4 fixed locations).
+\end{itemize}
+
+The action space is composed of 6 discrete actions:
+
+\begin{itemize}
+\item
+  Move south,
+\item
+  Move north,
+\item
+  Move east,
+\item
+  Move west,
+\item
+  Pickup passenger,
+\item
+  Dropoff passenger.
+\end{itemize}
+
+The reward structure is defined as follows:
+
+\begin{itemize}
+\item
+  +20 for successfully delivering the passenger,
+\item
+  $-1$ for each time step (to encourage efficiency),
+\item
+  $-10$ for illegal pickup or dropoff actions.
+\end{itemize}
+
+Each episode terminates either when the passenger is successfully
+delivered or when a maximum number of steps (200) is reached. The latter
+condition prevents infinite trajectories and ensures bounded returns.
+
+Taxi-v3 is deterministic, meaning that for each state-action pair, the
+next state is uniquely determined. This property simplifies the learning
+dynamics and makes the environment particularly suitable for analyzing
+tabular Q-learning behavior.
+
+\hypertarget{introduction-to-reinforcement-learning}{%
+\section{Introduction to reinforcement
+learning}\label{introduction-to-reinforcement-learning}}
+
+Reinforcement Learning (RL) is a learning paradigm in which an agent
+interacts with an environment in order to maximize cumulative reward
+through trial-and-error experience. Unlike supervised learning, where
+labeled input-output pairs are provided, in RL the agent must discover
+which actions yield the highest long-term benefit by interacting with
+the environment and observing feedback in the form of rewards.
+
+The interaction between the agent and the environment is typically
+modeled as a Markov Decision Process (MDP). At each discrete time step
+\(t\), the agent:
+
+\begin{itemize}
+\item
+  observes the current state \(s_{t} \in \mathcal{S}\),
+\item
+  selects an action \(a_{t} \in \mathcal{A}\),
+\item
+  receives a reward \(r_{t + 1}\),
+\item
+  transitions to a new state \(s_{t + 1}\).
+\end{itemize}
+
+The objective of the agent is to maximize the expected cumulative
+discounted reward, also called the return:
+
+\[G_{t} = \sum_{k = 0}^{\infty}\gamma^{k}r_{t + k + 1}
+\]
+
+where \(\left. \ \gamma \in \lbrack 0,1 \right)\) is the discount factor.
+The discount factor determines the relative importance of future rewards
+compared to immediate rewards. A value of \(\gamma\) close to 1
+encourages long-term planning, while a smaller value makes the agent
+more short-sighted.
+
+A central concept in Reinforcement Learning is the policy, denoted by
+\(\pi\). A policy defines the behavior of the agent and specifies how
+actions are chosen given states:
+
+\[\pi(a \mid s) = P(a_{t} = a \mid s_{t} = s)
+\]
+
+The goal of learning is to find an optimal policy \(\pi^{*}\) that
+maximizes the expected return.
+
+To evaluate how good a state or action is under a given policy, value
+functions are introduced. The state-value function is defined as:
+
+\[V^{\pi}(s) = \mathbb{E}_{\pi}\lbrack G_{t} \mid s_{t} = s\rbrack
+\]
+
+Similarly, the action-value function (or Q-function) is defined as:
+
+\[Q^{\pi}(s,a) = \mathbb{E}_{\pi}\lbrack G_{t} \mid s_{t} = s,a_{t} = a\rbrack
+\]
+
+The optimal action-value function \(Q^{*}(s,a)\) satisfies the Bellman
+optimality equation:
+
+\[Q^{*}(s,a) = r(s,a) + \gamma\underset{a^{'} \in \mathcal{A}}{\max}Q^{*}(s^{'},a^{'})
+\]
+
+where \(s^{'}\) denotes the next state resulting from taking action
+\(a\) in state \(s\).
+
+This recursive relationship expresses the principle of optimality: the
+value of a state-action pair equals the immediate reward plus the
+discounted value of the best possible action in the next state.
+
+In practice, the optimal Q-function is not known in advance and must be
+approximated through interaction with the environment. Q-learning is one
+such method, using a temporal-difference update rule to iteratively
+approximate the Bellman optimality equation. In the tabular case, the
+action-value function is stored explicitly as a table and updated after
+each interaction step.
+
+\hypertarget{from-theory-to-implementation}{%
+\section{From Theory to
+Implementation}\label{from-theory-to-implementation}}
+
+The Bellman optimality equation provides a theoretical characterization
+of the optimal action-value function:
+
+\[Q^{*}(s,a) = r(s,a) + \gamma\underset{a^{'} \in \mathcal{A}}{\max}Q^{*}(s^{'},a^{'})
+\]
+
+However, this equation alone does not provide a direct computational
+method, since the optimal function \(Q^{*}\) is unknown. In practice, we
+approximate this function iteratively through interaction with the
+environment.
+
+In the tabular setting, the action-value function is represented
+explicitly as a matrix of size
+\(\mid \mathcal{S} \mid \times \mid \mathcal{A} \mid\). Each row
+corresponds to a state, and each column corresponds to a possible
+action. The entry \(Q(s,a)\) stores the current estimate of the expected
+cumulative discounted reward obtained by taking action \(a\) in state
+\(s\)and subsequently acting optimally.
+
+Initially, all Q-values are set to zero, representing a complete lack of
+prior knowledge. During training, the agent interacts with the
+environment over multiple episodes. At each step, after observing the
+reward and the next state, the Q-value corresponding to the executed
+state-action pair is updated according to:
+
+\[Q(s,a) \leftarrow Q(s,a) + \alpha\lbrack r + \gamma\underset{a^{'}}{\max}Q(s^{'},a^{'}) - Q(s,a)\rbrack
+\]
+
+This update progressively pushes the current estimate toward the value
+suggested by the Bellman equation. Over many episodes, information about
+successful trajectories propagates backward through the table, allowing
+the agent to approximate the optimal policy.
+
+\hypertarget{exploration-strategy}{%
+\subsection{Exploration strategy}\label{exploration-strategy}}
+
+Since the Q-values are initially inaccurate, the agent must explore the
+environment. For this reason, an \(\epsilon\)-greedy strategy is
+adopted:
+
+\[\pi(a \mid s) = \left\{ \begin{matrix}
+\text{random\ action} & \text{with\ probability\ }\epsilon \\
+\arg{\max}_{a}Q(s,a) & \text{with\ probability\ }1 - \epsilon \\
+\end{matrix} \right.\ 
+\]
+
+The exploration parameter \(\epsilon\) is progressively reduced during
+training in order to shift from exploration to exploitation. This
+ensures that early learning phases sufficiently cover the state-action
+space, while later phases focus on refining the learned policy.
+
+\hypertarget{training-procedure}{%
+\subsection{Training Procedure}\label{training-procedure}}
+
+Training is performed over 10,000 episodes. At the beginning of each
+episode, the environment is reset and a new initial state is sampled.
+The agent then repeatedly:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Selects an action according to the \(\epsilon\)-greedy policy.
+\item
+  Executes the action in the environment.
+\item
+  Observes the reward and the next state.
+\item
+  Updates the corresponding Q-table entry.
+\end{enumerate}
+
+Each episode terminates either when the passenger is successfully
+delivered or when the maximum number of steps imposed by the environment
+is reached.
+
+\hypertarget{implementation-of-the-tabular-q-learning-agent}{%
+\section{Implementation of the Tabular Q-Learning
+Agent}\label{implementation-of-the-tabular-q-learning-agent}}
+
+The tabular agent is implemented as a Python class that explicitly
+stores the action-value function \(Q(s,a)\)as a matrix with shape
+\(\mid \mathcal{S} \mid \times \mid \mathcal{A} \mid\). In the Taxi-v3
+environment, the state space is discrete with
+\(\mid \mathcal{S} \mid = 500\)and the action space has
+\(\mid \mathcal{A} \mid = 6\)actions. The Q-table is initialized to
+zero, meaning that initially the agent has no preference among actions.
+
+\hypertarget{agent-initialization}{%
+\subsection{Agent Initialization}\label{agent-initialization}}
+
+The constructor receives the environment dimensions and learning
+hyperparameters. In particular:
+
+\begin{itemize}
+\item
+  \(\gamma\)(discount factor) controls the importance of future rewards.
+\item
+  \(\epsilon\) controls exploration through an \(\epsilon\)-greedy
+  policy.
+\item
+  \(\epsilon_{\text{decay}}\) and \(\epsilon_{\min}\) reduce exploration
+  over time while keeping a minimum probability of random actions.
+\item
+  \(\alpha\)(learning rate) controls how strongly new information
+  updates the current estimate.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{image2.png}
+    \caption{Agent initialization code}
+    \label{fig:agent-init}
+\end{figure}
+
+\hypertarget{action-selection-epsilon-greedy-policy}{%
+\subsection{\texorpdfstring{Action Selection: \(\epsilon\)-Greedy
+Policy}{Action Selection: \textbackslash epsilon-Greedy Policy}}\label{action-selection-epsilon-greedy-policy}}
+
+The method select\_action(state, training=True) implements the
+exploration strategy:
+
+\begin{itemize}
+\item
+  during training, with probability \(\epsilon\), a random action is
+  sampled uniformly from the discrete action set;
+\item
+  otherwise, the greedy action is selected as the action with maximum
+  estimated value in the current state:
+\end{itemize}
+
+\[a = \arg\underset{a \in \mathcal{A}}{\max}Q(s,a).
+\]
+
+When training=False, exploration is disabled and the policy becomes
+purely greedy, which is appropriate for evaluation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{image3.png}
+    \caption{Action selection implementation}
+    \label{fig:action-selection}
+\end{figure}
+
+\hypertarget{q-table-update}{%
+\subsection{Q-table Update}\label{q-table-update}}
+
+After executing an action and observing \(\left( s,a,r,s^{'} \right)\),
+the Q-table is updated according to the tabular Q-learning rule:
+
+\[Q(s,a) \leftarrow Q(s,a) + \alpha\lbrack r + \gamma\underset{a^{'}}{\max}Q(s^{'},a^{'}) - Q(s,a)\rbrack.
+\]
+
+This update moves the current estimate toward the Bellman optimality
+target \(r + \gamma{\max}_{a^{'}}Q(s^{'},a^{'})\), progressively
+improving the quality of the learned action-value function.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{image4.png}
+    \caption{Q-table update implementation}
+    \label{fig:q-update}
+\end{figure}
+\hypertarget{exploration-decay}{%
+\subsection{Exploration decay}\label{exploration-decay}}
+
+The method decay\_epsilon() updates the exploration rate after each
+episode:
+
+\[\epsilon \leftarrow \max(\epsilon_{\min},\epsilon \cdot \epsilon_{\text{decay}}),
+\]
+
+allowing the agent to explore extensively in early episodes and
+gradually exploit the learned policy.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{image5.png}
+    \caption{Epsilon decay implementation}
+    \label{fig:epsilon-decay}
+\end{figure}
+\hypertarget{training-loop}{%
+\subsection{Training Loop}\label{training-loop}}
+
+The function train\_agent(env, agent, num\_episodes, print\_interval)
+trains the agent for a fixed number of episodes. Each episode starts
+with env.reset() and proceeds until either the task is completed
+(terminated=True) or a step limit is reached (truncated=True). At each
+step:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  an action is selected via select\_action;
+\item
+  the environment transition is performed using env.step(action);
+\item
+  the Q-table is updated via update;
+\item
+  the next state becomes the current state.
+\end{enumerate}
+
+The total reward per episode is recorded in rewards\_history, while the
+evolution of \(\epsilon\) is stored in epsilon\_history. Periodically, an
+average reward over the last episodes is printed to monitor convergence.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{image6.png}
+    \caption{Training loop implementation}
+    \label{fig:training-loop}
+\end{figure}
+
+\hypertarget{evaluation-and-visualization}{%
+\subsection{Evaluation and
+Visualization}\label{evaluation-and-visualization}}
+
+The function evaluate\_agent runs a set of evaluation episodes using the
+greedy policy (training=False) to estimate the final performance,
+reporting mean/min/max total rewards. The function
+plot\_training\_results visualizes learning dynamics by plotting episode
+rewards (with moving average smoothing) and the exploration decay curve.
+Finally, run\_demo renders a single greedy episode to qualitatively
+inspect the learned behavior.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{image7.png}
+    \caption{Evaluation function implementation}
+    \label{fig:evaluate-agent}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{image8.png}
+    \caption{Plot training results implementation}
+    \label{fig:plot-training}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{image9.png}
+    \caption{Demo execution implementation}
+    \label{fig:run-demo}
+\end{figure}
+
+\hypertarget{experimental-results-and-analysis}{%
+\subsection{Experimental Results and
+Analysis}\label{experimental-results-and-analysis}}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{image10.png}
+    \caption{Training progress: reward evolution over 10,000 episodes}
+    \label{fig:training-results}
+\end{figure}
+
+The training process was conducted for 10,000 episodes. The evolution of
+the average reward reveals a clear and structured learning progression.
+
+During the initial phase (episodes 1-1000), the agent obtains extremely
+negative rewards, reaching values as low as $-742$ on average. This
+behavior is expected, as the exploration rate is still high ($\epsilon \approx$ 0.9)
+and actions are mostly random. In this phase, the agent frequently
+performs illegal pickup and dropoff actions ($-10$ penalty) and often
+fails to complete the task within the step limit, accumulating large
+negative returns.
+
+Episode 100/10000, Avg Reward: -742.15, Epsilon: 0.905
+
+Episode 200/10000, Avg Reward: -668.14, Epsilon: 0.819
+
+Episode 300/10000, Avg Reward: -550.35, Epsilon: 0.741
+
+Episode 400/10000, Avg Reward: -453.34, Epsilon: 0.670
+
+Episode 500/10000, Avg Reward: -369.38, Epsilon: 0.606
+
+Episode 600/10000, Avg Reward: -268.34, Epsilon: 0.549
+
+Episode 700/10000, Avg Reward: -190.51, Epsilon: 0.496
+
+Episode 800/10000, Avg Reward: -137.31, Epsilon: 0.449
+
+Episode 900/10000, Avg Reward: -99.17, Epsilon: 0.406
+
+Episode 1000/10000, Avg Reward: -54.96, Epsilon: 0.368
+
+Between episodes 1000 and 2500, the learning curve shows a steady
+improvement. The average reward gradually approaches zero and then
+becomes positive. This transition marks the point at which the agent
+begins to consistently complete the task. The decreasing exploration
+rate ($\epsilon$ decreasing from 0.36 to approximately 0.08) indicates a gradual
+shift from exploration toward exploitation of learned knowledge.
+
+Episode 1000/10000, Avg Reward: -54.96, Epsilon: 0.368
+
+Episode 1100/10000, Avg Reward: -46.07, Epsilon: 0.333
+
+Episode 1200/10000, Avg Reward: -33.63, Epsilon: 0.301
+
+Episode 1300/10000, Avg Reward: -24.68, Epsilon: 0.272
+
+Episode 1400/10000, Avg Reward: -12.66, Epsilon: 0.246
+
+Episode 1500/10000, Avg Reward: -8.42, Epsilon: 0.223
+
+Episode 1600/10000, Avg Reward: -9.99, Epsilon: 0.202
+
+Episode 1700/10000, Avg Reward: -3.92, Epsilon: 0.183
+
+Episode 1800/10000, Avg Reward: -3.77, Epsilon: 0.165
+
+Episode 1900/10000, Avg Reward: -1.41, Epsilon: 0.149
+
+Episode 2000/10000, Avg Reward: -1.43, Epsilon: 0.135
+
+Episode 2100/10000, Avg Reward: 0.60, Epsilon: 0.122
+
+Episode 2200/10000, Avg Reward: 0.97, Epsilon: 0.111
+
+Episode 2300/10000, Avg Reward: 1.56, Epsilon: 0.100
+
+Episode 2400/10000, Avg Reward: 2.38, Epsilon: 0.091
+
+Episode 2500/10000, Avg Reward: 3.78, Epsilon: 0.082
+
+From approximately episode 3000 onward, the reward stabilizes in the
+positive region. After episode 4000, the agent consistently achieves
+average rewards above 6.5. Once $\epsilon$ reaches its minimum value (0.01), the
+learning curve becomes stable, oscillating around a plateau between 7.0
+and 8.2.
+
+Episode 3500/10000, Avg Reward: 6.20, Epsilon: 0.030
+
+Episode 3600/10000, Avg Reward: 6.45, Epsilon: 0.027
+
+Episode 3700/10000, Avg Reward: 5.89, Epsilon: 0.025
+
+Episode 3800/10000, Avg Reward: 6.65, Epsilon: 0.022
+
+Episode 3900/10000, Avg Reward: 7.06, Epsilon: 0.020
+
+Episode 4000/10000, Avg Reward: 6.57, Epsilon: 0.018
+
+Episode 5000/10000, Avg Reward: 7.77, Epsilon: 0.010
+
+Episode 6000/10000, Avg Reward: 6.98, Epsilon: 0.010
+
+Episode 7000/10000, Avg Reward: 6.97, Epsilon: 0.010
+
+Episode 8000/10000, Avg Reward: 7.33, Epsilon: 0.010
+
+Episode 9000/10000, Avg Reward: 6.99, Epsilon: 0.010
+
+Episode 10000/10000, Avg Reward: 7.75, Epsilon: 0.010
+
+At the end of training (episode 10,000), the average reward over the
+final interval is:
+
+\[\text{Average\ reward} \approx 7.75\]
+
+This indicates convergence toward a near-optimal policy.
+
+\hypertarget{interpretation-of-the-learned-policy}{%
+\subsection{Interpretation of the Learned
+Policy}\label{interpretation-of-the-learned-policy}}
+
+In Taxi-v3, the reward structure is defined as:
+
+\begin{itemize}
+\item
+  +20 for successful dropoff,
+\item
+  $-1$ per time step,
+\item
+  $-10$ for illegal pickup/dropoff.
+\end{itemize}
+
+An optimal trajectory typically requires between 12 and 14 steps,
+depending on the relative positions of the taxi, passenger, and
+destination. Therefore, the expected reward under an optimal policy can
+be approximated as:
+
+\[20 - \text{(number\ of\ optimal\ steps)} \approx 6\text{–}8.
+\]
+
+The observed training plateau ($\approx 7.7-8.2$) is fully consistent with this
+theoretical estimate, indicating that the agent has learned near-optimal
+trajectories and avoids unnecessary actions.
+
+\hypertarget{evaluation-phase}{%
+\subsection{Evaluation Phase}\label{evaluation-phase}}
+
+After training, the agent was evaluated over 100 episodes using a purely
+greedy policy ($\epsilon$ = 0).
+
+The evaluation results were:
+
+\begin{itemize}
+\item
+  Average reward: 7.93
+\item
+  Minimum reward: 3.00
+\item
+  Maximum reward: 13.00
+\end{itemize}
+
+The evaluation average (7.93) is slightly higher than the training
+plateau. This is expected because exploration is completely disabled
+during evaluation, eliminating occasional suboptimal exploratory
+actions.
+
+The variability between minimum and maximum reward is due to random
+initial configurations. Since the passenger and destination positions
+are randomly sampled, the optimal path length varies. Short optimal
+paths yield higher rewards (up to 13), while longer optimal paths yield
+lower but still positive rewards.
+
+Importantly, no large negative rewards are observed during evaluation.
+This confirms that the agent has learned to avoid illegal actions and
+inefficient trajectories.
+
+\hypertarget{convergence-properties}{%
+\subsection{Convergence properties}\label{convergence-properties}}
+
+The convergence behavior suggests that:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  The Q-table has sufficiently explored and updated the relevant
+  state-action pairs.
+\item
+  The learning rate $\alpha$ allows stable incremental updates.
+\item
+  The $\epsilon$-decay schedule effectively balances exploration and
+  exploitation.
+\end{enumerate}
+
+The stabilization of performance after approximately 4000--5000 episodes
+indicates that the selected hyperparameters are appropriate for the
+Taxi-v3 environment.
+
+Overall, the results demonstrate that tabular Q-learning successfully
+converges to a near-optimal policy in finite, deterministic environments
+with moderate state spaces.
+
+\end{document}

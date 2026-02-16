@@ -5,16 +5,14 @@ import matplotlib.pyplot as plt
 
 class Agent:
     
-    def __init__(self, n_states, n_actions, alpha=0.1, gamma=0.99, 
-                 epsilon=1.0, epsilon_decay=0.995, epsilon_min=0.01):
+    def __init__(self, n_states, n_actions, gamma=0.99, 
+                 epsilon=1.0, epsilon_decay=0.999, epsilon_min=0.01, alpha=0.1):
         """
-        Initializes the Q-learning agent
-        
         Args:
             n_states: Number of states in the environment, for taxi v3 there are 500
             n_actions: Number of available actions which is 6
-            alpha: Learning rate which is the learning speed
             gamma: Discount factor, used to balance the importance of future rewards compared to immediate ones
+            alpha: Learning rate, determines how much the Q-values are updated during learning, a value of 0.1 means that the Q-values are updated by 10% of the new information obtained from the reward and the next state
             epsilon: Initial exploration rate, set to 1 to explore a lot at the beginning and decrease over time
             epsilon_decay: Decay factor for epsilon, this is the rate at which epsilon decreases after each episode, used in the decay_epsilon function
             epsilon_min: Minimum value of epsilon, a minimum value is kept to prevent it from becoming 0 and therefore never exploring again
@@ -22,11 +20,11 @@ class Agent:
         
         self.n_states = n_states # 500
         self.n_actions = n_actions # 6 = south, north, west, east, pickup, dropoff
-        self.alpha = alpha 
         self.gamma = gamma
         self.epsilon = epsilon
         self.epsilon_decay = epsilon_decay
         self.epsilon_min = epsilon_min 
+        self.alpha = alpha 
         
         # Initialize Q-table
         self.Q = np.zeros((n_states, n_actions)) 
@@ -35,16 +33,7 @@ class Agent:
 
     
     def select_action(self, state, training=True):
-        """
-        Agent policy: epsilon-greedy
-        
-        Args:
-            state: Current state
-            training: If True uses epsilon-greedy, otherwise greedy
-            
-        Returns:
-            Selected action
-        """
+
         if training and np.random.random() < self.epsilon: # the random number is between 0 and 1
             return np.random.randint(self.n_actions) # if a random number is less than epsilon, explore
         else:
@@ -52,34 +41,22 @@ class Agent:
         # in both cases the indices of the actions (0-5) are returned because that's how they are encoded in the taxi v3 environment
     
     def update(self, state, action, reward, next_state):
-       
-        """ Updates the Q-table using the Q-learning algorithm """
-         
-        self.Q[state, action] = reward + self.gamma * np.max(self.Q[next_state]) # the Q value for the current state and action is updated using the reward received and the maximum Q value of the next state, discounted by gamma. This is the core of the Q-learning algorithm, which updates the Q-table based on the observed rewards and the estimated future rewards.
+
+        td_target = reward + self.gamma * np.max(self.Q[next_state])
+        self.Q[state, action] = (1 - self.alpha) * self.Q[state, action] + self.alpha * td_target
+   
     
     def decay_epsilon(self):
-        """Applies decay to epsilon"""
+        
         self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay) # decreases epsilon by multiplying it by the decay factor, but does not let it go below epsilon_min
     
     def get_greedy_action(self, state):
-        """Returns the greedy action for a state"""
+        
         return np.argmax(self.Q[state]) # returns the action with the highest Q value for the given state
 
 
 def train_agent(env, agent, num_episodes=10000, print_interval=1000):
-    """
-    Trains the agent in the environment
-    
-    Args:
-        env: Gymnasium environment
-        agent: QLearningAgent
-        num_episodes: Number of training episodes
-        print_interval: Interval for printing progress
-        
-    Returns:
-        rewards_history: List of rewards per episode
-        epsilon_history: List of epsilon values
-    """
+
     rewards_history = []
     epsilon_history = []
     
@@ -130,17 +107,7 @@ def train_agent(env, agent, num_episodes=10000, print_interval=1000):
 
 
 def evaluate_agent(env, agent, num_episodes=100):
-    """
-    Evaluates the agent's performance, takes the trained Q-table, so the optimal policy
-    
-    Args:
-        env: Gymnasium environment
-        agent: Trained QLearningAgent
-        num_episodes: Number of evaluation episodes
-        
-    Returns:
-        test_rewards: List of obtained rewards
-    """
+
     print("\nEvaluating agent...")
     test_rewards = []
     
@@ -167,7 +134,7 @@ def evaluate_agent(env, agent, num_episodes=100):
 
 def plot_training_results(rewards_history, epsilon_history, window_size=100):
     
-    plt.figure(figsize=(16, 5))
+    plt.figure(figsize=(12, 4))
     
     moving_avg = np.convolve(rewards_history, 
                             np.ones(window_size)/window_size, 
@@ -243,16 +210,15 @@ def main():
     agent = Agent(
         n_states=env.observation_space.n,
         n_actions=env.action_space.n,
-        alpha=0.1,
         gamma=0.99,
         epsilon=1.0,
-        epsilon_decay=0.995,
+        epsilon_decay=0.999,
         epsilon_min=0.01
     )
     
     # Training
     rewards_history, epsilon_history = train_agent(
-        env, agent, num_episodes=num_episodes, print_interval=1000
+        env, agent, num_episodes=num_episodes, print_interval=100
     )
     
     # Evaluation
