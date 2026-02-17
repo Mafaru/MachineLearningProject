@@ -33,7 +33,7 @@ class ReplayBuffer:
     def push(self, transition: Transition):
         self.buffer.append(transition)
 
-    def sample(self, batch_size: int):
+    def sample(self, batch_size: int): 
         if batch_size > len(self.buffer):
             raise ValueError(
                 f"Cannot sample {batch_size} elements from buffer of size {len(self.buffer)}"
@@ -61,12 +61,12 @@ class QNetwork(nn.Module):
 
         super(QNetwork, self).__init__()
         
-        self.fc1 = nn.Linear(n_states, 128)
-        self.fc2 = nn.Linear(128, 128)
-        self.out = nn.Linear(128, n_actions)
+        self.fc1 = nn.Linear(n_states, 128) #trasforma gli n_stati in un vettore di 128 elementi, questo è il primo strato completamente connesso
+        self.fc2 = nn.Linear(128, 128) #trasforma il vettore di 128 elementi in un altro vettore di 128 elementi, questo è il secondo strato completamente connesso
+        self.out = nn.Linear(128, n_actions) #trasforma il vettore di 128 elementi in un vettore con n_actions elementi, questo è lo strato di output che fornisce i Q-values per ogni azione possibile nello stato dato
 
     def forward(self, x):
-        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc1(x)) 
         x = F.relu(self.fc2(x))
         return self.out(x)  # Q-values for all actions
 
@@ -93,14 +93,15 @@ class DQNAgent:
         """
         
         self.n_states = n_states # 500
-        self.n_actions = n_actions # 6 = south, north, west, east, pickup, dropoff 
+        self.n_actions = n_actions # 6 = south, north, west, east, pickup, dropoff
+        self.alpha = alpha 
         self.gamma = gamma
         self.epsilon = epsilon
         self.epsilon_start = epsilon
         self.epsilon_decay = epsilon_decay
         self.epsilon_min = epsilon_min 
         
-        #DQN Specific Parameters
+        #DQN Parameters
         self.batch_size = batch_size
         self.buffer_size = buffer_size
         self.min_buffer_size = min_buffer_size
@@ -111,8 +112,10 @@ class DQNAgent:
 
         # NEURAL NETWORK
         self.q_network = QNetwork(n_states, n_actions)
-        self.optimizer = torch.optim.Adam(self.q_network.parameters(), lr=1e-3)
-        self.loss_fn = nn.MSELoss()
+        #first optimizer
+        #self.optimizer = torch.optim.Adam(self.q_network.parameters(), lr=self.alpha)
+        self.optimizer = torch.optim.Adam(self.q_network.parameters(), lr=1e-3) 
+        self.loss_fn = nn.MSELoss() #questo è l'errore quadratico medio, usato per calcolare la differenza tra i Q-values predetti dalla rete e i target Q-values calcolati durante l'addestramento
 
 
     #trasform the state number into a vector with all zeros, exept the number of state
@@ -138,23 +141,23 @@ class DQNAgent:
             return np.random.randint(self.n_actions)
 
         # Exploitation using the Q-network
-        state_tensor = self.one_hot(state).unsqueeze(0)
+        state_tensor = self.one_hot(state).unsqueeze(0) 
 
         with torch.no_grad():
-            q_values = self.q_network(state_tensor)
+            q_values = self.q_network(state_tensor) # Q-values for all actions in the current state
 
-        return torch.argmax(q_values).item()
+        return torch.argmax(q_values).item() #questo restituisce l'indice dell'azione con il Q-value più alto, che è l'azione che il DQN ritiene migliore in base alla sua attuale stima
     
 
     def train_step(self):
         if len(self.buffer) < self.min_buffer_size:
             return
 
-        batch = self.buffer.sample(self.batch_size)
+        batch = self.buffer.sample(self.batch_size) # questo è un campione di transizioni, è una lista di oggetti Transition, ognuno con state, action, reward, next_state e done, casuali.
         batch_size = len(batch)
 
         # Preallocate tensors
-        states = torch.zeros(batch_size, self.n_states, dtype=torch.float32)
+        states = torch.zeros(batch_size, self.n_states, dtype=torch.float32) 
         next_states = torch.zeros(batch_size, self.n_states, dtype=torch.float32)
         actions = torch.zeros(batch_size, dtype=torch.long)
         rewards = torch.zeros(batch_size, dtype=torch.float32)
@@ -162,24 +165,24 @@ class DQNAgent:
 
         # Fill tensors
         for i, t in enumerate(batch):
-            states[i, t.state] = 1.0
+            states[i, t.state] = 1.0 
             next_states[i, t.next_state] = 1.0
-            actions[i] = t.action
+            actions[i] = t.action 
             rewards[i] = t.reward
             dones[i] = t.done
 
         # Compute current Q(s, a)
-        q_values = self.q_network(states)
-        q_sa = q_values.gather(1, actions.unsqueeze(1)).squeeze(1)
+        q_values = self.q_network(states) #restituisce i Q-values per tutte le azioni in tutti gli stati del batch, è una matrice di dimensione (batch_size, n_actions)
+        q_sa = q_values.gather(1, actions.unsqueeze(1)).squeeze(1) #qui invece prende il Q value solo dell'azione che stiamo eseguendo.
 
         # Compute target Q-values
         with torch.no_grad():
-            next_q_values = self.q_network(next_states)
-            max_next_q = next_q_values.max(dim=1)[0]
-            targets = rewards + self.gamma * max_next_q * (1 - dones)
+            next_q_values = self.q_network(next_states) #calcola i q_values per gli stati successivi.
+            max_next_q = next_q_values.max(dim=1)[0] #per ogni riga prende il massimo Q value.
+            targets = rewards + self.gamma * max_next_q * (1 - dones) #e questo vettore di massimi Q values viene usato per calcolare i target Q values, che sono la ricompensa immediata più il valore scontato del miglior Q value del prossimo stato, moltiplicato per (1 - done) per azzerare il target se l'episodio è finito.
 
         # Compute loss
-        loss = F.mse_loss(q_sa, targets)
+        loss = F.mse_loss(q_sa, targets) #questo è importante, perche confronta i Q values predetti dalla rete q_sa con i target Q values, se la differenza è tanta significa che la rete non sta facendo un buon lavoro nel predire i Q values corretti, e quindi il loss sarà alto, se invece la differenza è piccola, significa che la rete sta predicendo bene i Q values, e quindi il loss sarà basso. L'obiettivo dell'addestramento è minimizzare questo loss, in modo che la rete impari a predire Q values più accurati.
 
         # Backprop
         self.optimizer.zero_grad()
@@ -189,7 +192,11 @@ class DQNAgent:
 
     def decay_epsilon(self):
         """Applies decay to epsilon"""
+        #TOO FAST with decay of 0.995
         self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay) # decreases epsilon by multiplying it by the decay factor, but does not let it go below epsilon_min
+        
+        #WE HAVE TO MODIFY THIS
+        #self.epsilon = self.epsilon_min + (self.epsilon_start - self.epsilon_min) * exp(-self.decay_rate * episode)
 
 
 def warmup(env, agent):
@@ -237,7 +244,19 @@ def warmup(env, agent):
 
 
 def train_agent(env, agent, num_episodes=2000, print_interval=100):
-   
+    """
+    Trains the agent in the environment
+    
+    Args:
+        env: Gymnasium environment
+        agent: QLearningAgent
+        num_episodes: Number of training episodes
+        print_interval: Interval for printing progress
+        
+    Returns:
+        rewards_history: List of rewards per episode
+        epsilon_history: List of epsilon values
+    """
     rewards_history = []
     epsilon_history = []
     
@@ -250,12 +269,8 @@ def train_agent(env, agent, num_episodes=2000, print_interval=100):
         state, _ = env.reset()
         total_reward = 0
 
-        #for step in range(agent.max_steps_per_episode):
-        step = 0
-        done = False
-        truncated = False # truncated is used for environments with step limits like taxi v3
+        for step in range(agent.max_steps_per_episode):
 
-        while not done and not truncated:
             # 1. Select action (ε-greedy)
             action = agent.select_action(state, training=True)
 
@@ -274,10 +289,9 @@ def train_agent(env, agent, num_episodes=2000, print_interval=100):
 
             state = next_state
             total_reward += reward
-            step += 1
 
-            #if done or truncated:
-            #    break
+            if done or truncated:
+                break
         
         # Decay epsilon
         agent.decay_epsilon()
@@ -407,7 +421,7 @@ def main():
     """Main function"""
     # Parameters
     env_name = "Taxi-v3"
-    num_episodes = 4000
+    num_episodes = 6000
     num_test_episodes = 100
     
     # Create environment
@@ -420,11 +434,12 @@ def main():
         alpha=0.1,
         gamma=0.99,
         epsilon=1.0,
-        epsilon_decay=0.999,
+        epsilon_decay=0.997,
         epsilon_min=0.01,
         batch_size=64,
         buffer_size=50000,
         min_buffer_size=1000,
+        max_steps_per_episode=200
     )
 
     print(f"\nAgent's Parameters:\n\n Epsilon decay:", dqnagent.epsilon_decay , "\n Batch size:", dqnagent.batch_size , 

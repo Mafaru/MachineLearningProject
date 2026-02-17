@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 class Agent:
     
     def __init__(self, n_states, n_actions, gamma=0.99, 
-                 epsilon=1.0, epsilon_decay=0.999, epsilon_min=0.01, alpha=0.1):
+                 epsilon=1.0, epsilon_decay=0.999, epsilon_min=0.01, alpha=0.8):
         """
         Args:
             n_states: Number of states in the environment, for taxi v3 there are 500
@@ -200,7 +200,7 @@ def main():
     """Main function"""
     # Parameters
     env_name = "Taxi-v3"
-    num_episodes = 10000
+    num_episodes = 6000
     num_test_episodes = 100
     
     # Create environment
@@ -211,8 +211,9 @@ def main():
         n_states=env.observation_space.n,
         n_actions=env.action_space.n,
         gamma=0.99,
+        alpha=0.8,
         epsilon=1.0,
-        epsilon_decay=0.999,
+        epsilon_decay=0.997,
         epsilon_min=0.01
     )
     
