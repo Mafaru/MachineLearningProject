@@ -93,15 +93,14 @@ class DQNAgent:
         """
         
         self.n_states = n_states # 500
-        self.n_actions = n_actions # 6 = south, north, west, east, pickup, dropoff
-        self.alpha = alpha 
+        self.n_actions = n_actions # 6 = south, north, west, east, pickup, dropoff 
         self.gamma = gamma
         self.epsilon = epsilon
         self.epsilon_start = epsilon
         self.epsilon_decay = epsilon_decay
         self.epsilon_min = epsilon_min 
         
-        #DQN Parameters
+        #DQN Specific Parameters
         self.batch_size = batch_size
         self.buffer_size = buffer_size
         self.min_buffer_size = min_buffer_size
@@ -112,8 +111,6 @@ class DQNAgent:
 
         # NEURAL NETWORK
         self.q_network = QNetwork(n_states, n_actions)
-        #first optimizer
-        #self.optimizer = torch.optim.Adam(self.q_network.parameters(), lr=self.alpha)
         self.optimizer = torch.optim.Adam(self.q_network.parameters(), lr=1e-3)
         self.loss_fn = nn.MSELoss()
 
@@ -192,11 +189,7 @@ class DQNAgent:
 
     def decay_epsilon(self):
         """Applies decay to epsilon"""
-        #TOO FAST with decay of 0.995
         self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay) # decreases epsilon by multiplying it by the decay factor, but does not let it go below epsilon_min
-        
-        #WE HAVE TO MODIFY THIS
-        #self.epsilon = self.epsilon_min + (self.epsilon_start - self.epsilon_min) * exp(-self.decay_rate * episode)
 
 
 def warmup(env, agent):
@@ -244,19 +237,7 @@ def warmup(env, agent):
 
 
 def train_agent(env, agent, num_episodes=2000, print_interval=100):
-    """
-    Trains the agent in the environment
-    
-    Args:
-        env: Gymnasium environment
-        agent: QLearningAgent
-        num_episodes: Number of training episodes
-        print_interval: Interval for printing progress
-        
-    Returns:
-        rewards_history: List of rewards per episode
-        epsilon_history: List of epsilon values
-    """
+   
     rewards_history = []
     epsilon_history = []
     
@@ -269,8 +250,12 @@ def train_agent(env, agent, num_episodes=2000, print_interval=100):
         state, _ = env.reset()
         total_reward = 0
 
-        for step in range(agent.max_steps_per_episode):
+        #for step in range(agent.max_steps_per_episode):
+        step = 0
+        done = False
+        truncated = False # truncated is used for environments with step limits like taxi v3
 
+        while not done and not truncated:
             # 1. Select action (ε-greedy)
             action = agent.select_action(state, training=True)
 
@@ -289,9 +274,10 @@ def train_agent(env, agent, num_episodes=2000, print_interval=100):
 
             state = next_state
             total_reward += reward
+            step += 1
 
-            if done or truncated:
-                break
+            #if done or truncated:
+            #    break
         
         # Decay epsilon
         agent.decay_epsilon()
@@ -439,7 +425,6 @@ def main():
         batch_size=64,
         buffer_size=50000,
         min_buffer_size=1000,
-        max_steps_per_episode=200
     )
 
     print(f"\nAgent's Parameters:\n\n Epsilon decay:", dqnagent.epsilon_decay , "\n Batch size:", dqnagent.batch_size , 
