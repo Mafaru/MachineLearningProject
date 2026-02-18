@@ -223,8 +223,11 @@ modeled as a Markov Decision Process (MDP). At each discrete time step
 The objective of the agent is to maximize the expected cumulative
 discounted reward, also called the return:
 
-\[G_{t} = \sum_{k = 0}^{\infty}\gamma^{k}r_{t + k + 1}
+\[
+V^{\pi}(s) \equiv 
+E \left[ \sum_{t=1}^{\infty} \gamma^{t-1} r_t \right]
 \]
+
 
 where \(\left. \ \gamma \in \lbrack 0,1 \right)\) is the discount factor.
 The discount factor determines the relative importance of future rewards
@@ -236,31 +239,33 @@ A central concept in Reinforcement Learning is the policy, denoted by
 \(\pi\). A policy defines the behavior of the agent and specifies how
 actions are chosen given states:
 
-\[\pi(a \mid s) = P(a_{t} = a \mid s_{t} = s)
+\[
+\pi : S \rightarrow A
 \]
 
-The goal of learning is to find an optimal policy \(\pi^{*}\) that
-maximizes the expected return.
 
-To evaluate how good a state or action is under a given policy, value
-functions are introduced. The state-value function is defined as:
+The goal of learning is to find an optimal policy
+\[
+\pi^{*} \equiv \arg\max_{\pi} V^{\pi}(s), \quad \forall s \in S
+\]
+that maximizes the expected cumulative discounted reward.
 
-\[V^{\pi}(s) = \mathbb{E}_{\pi}\lbrack G_{t} \mid s_{t} = s\rbrack
+To evaluate state-action pairs, the action-value function (Q-function) is introduced:
+
+\[
+Q^{\pi}(s,a) \equiv r(s,a) + \gamma V^{\pi}(\delta(s,a))
 \]
 
-Similarly, the action-value function (or Q-function) is defined as:
-
-\[Q^{\pi}(s,a) = \mathbb{E}_{\pi}\lbrack G_{t} \mid s_{t} = s,a_{t} = a\rbrack
-\]
+which represents the expected cumulative discounted reward obtained by
+executing action $a$ in state $s$ and subsequently following policy $\pi$.
 
 The optimal action-value function \(Q^{*}(s,a)\) satisfies the Bellman
 optimality equation:
 
-\[Q^{*}(s,a) = r(s,a) + \gamma\underset{a^{'} \in \mathcal{A}}{\max}Q^{*}(s^{'},a^{'})
+\[
+Q(s,a) = r(s,a) + \gamma \max_{a' \in A} Q(\delta(s,a),a')
 \]
 
-where \(s^{'}\) denotes the next state resulting from taking action
-\(a\) in state \(s\).
 
 This recursive relationship expresses the principle of optimality: the
 value of a state-action pair equals the immediate reward plus the
@@ -278,11 +283,7 @@ each interaction step.
 Implementation}\label{from-theory-to-implementation}}
 
 The Bellman optimality equation provides a theoretical characterization
-of the optimal action-value function:
-
-\[Q^{*}(s,a) = r(s,a) + \gamma\underset{a^{'} \in \mathcal{A}}{\max}Q^{*}(s^{'},a^{'})
-\]
-
+of the optimal action-value function.
 However, this equation alone does not provide a direct computational
 method, since the optimal function \(Q^{*}\) is unknown. In practice, we
 approximate this function iteratively through interaction with the
@@ -518,258 +519,12 @@ inspect the learned behavior.
     \label{fig:run-demo}
 \end{figure}
 
-\hypertarget{experimental-results-and-analysis}{%
-\subsection{Experimental Results and Analysis}\label{experimental-results-and-analysis}}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\linewidth]{image10.png}
-    \caption{Training progress: reward evolution over 10,000 episodes}
-    \label{fig:training-results}
-\end{figure}
 
-The training process was conducted for 10,000 episodes. The evolution of
-the average reward reveals a clear and structured learning progression.
 
-During the initial phase (episodes 1-1000), the agent obtains extremely
-negative rewards, reaching values as low as $-742$ on average. This
-behavior is expected, as the exploration rate is still high ($\epsilon \approx$ 0.9)
-and actions are mostly random. In this phase, the agent frequently
-performs illegal pickup and dropoff actions ($-10$ penalty) and often
-fails to complete the task within the step limit, accumulating large
-negative returns.
 
-Episode 100/10000, Avg Reward: -742.15, Epsilon: 0.905
-
-Episode 200/10000, Avg Reward: -668.14, Epsilon: 0.819
-
-Episode 300/10000, Avg Reward: -550.35, Epsilon: 0.741
-
-Episode 400/10000, Avg Reward: -453.34, Epsilon: 0.670
-
-Episode 500/10000, Avg Reward: -369.38, Epsilon: 0.606
-
-Episode 600/10000, Avg Reward: -268.34, Epsilon: 0.549
-
-Episode 700/10000, Avg Reward: -190.51, Epsilon: 0.496
-
-Episode 800/10000, Avg Reward: -137.31, Epsilon: 0.449
-
-Episode 900/10000, Avg Reward: -99.17, Epsilon: 0.406
-
-Episode 1000/10000, Avg Reward: -54.96, Epsilon: 0.368
-
-Between episodes 1000 and 2500, the learning curve shows a steady
-improvement. The average reward gradually approaches zero and then
-becomes positive. This transition marks the point at which the agent
-begins to consistently complete the task. The decreasing exploration
-rate ($\epsilon$ decreasing from 0.36 to approximately 0.08) indicates a gradual
-shift from exploration toward exploitation of learned knowledge.
-
-Episode 1000/10000, Avg Reward: -54.96, Epsilon: 0.368
-
-Episode 1100/10000, Avg Reward: -46.07, Epsilon: 0.333
-
-Episode 1200/10000, Avg Reward: -33.63, Epsilon: 0.301
-
-Episode 1300/10000, Avg Reward: -24.68, Epsilon: 0.272
-
-Episode 1400/10000, Avg Reward: -12.66, Epsilon: 0.246
-
-Episode 1500/10000, Avg Reward: -8.42, Epsilon: 0.223
-
-Episode 1600/10000, Avg Reward: -9.99, Epsilon: 0.202
-
-Episode 1700/10000, Avg Reward: -3.92, Epsilon: 0.183
-
-Episode 1800/10000, Avg Reward: -3.77, Epsilon: 0.165
-
-Episode 1900/10000, Avg Reward: -1.41, Epsilon: 0.149
-
-Episode 2000/10000, Avg Reward: -1.43, Epsilon: 0.135
-
-Episode 2100/10000, Avg Reward: 0.60, Epsilon: 0.122
-
-Episode 2200/10000, Avg Reward: 0.97, Epsilon: 0.111
-
-Episode 2300/10000, Avg Reward: 1.56, Epsilon: 0.100
-
-Episode 2400/10000, Avg Reward: 2.38, Epsilon: 0.091
-
-Episode 2500/10000, Avg Reward: 3.78, Epsilon: 0.082
-
-From approximately episode 3000 onward, the reward stabilizes in the
-positive region. After episode 4000, the agent consistently achieves
-average rewards above 6.5. Once $\epsilon$ reaches its minimum value (0.01), the
-learning curve becomes stable, oscillating around a plateau between 7.0
-and 8.2.
-
-Episode 3500/10000, Avg Reward: 6.20, Epsilon: 0.030
-
-Episode 3600/10000, Avg Reward: 6.45, Epsilon: 0.027
-
-Episode 3700/10000, Avg Reward: 5.89, Epsilon: 0.025
-
-Episode 3800/10000, Avg Reward: 6.65, Epsilon: 0.022
-
-Episode 3900/10000, Avg Reward: 7.06, Epsilon: 0.020
-
-Episode 4000/10000, Avg Reward: 6.57, Epsilon: 0.018
-
-Episode 5000/10000, Avg Reward: 7.77, Epsilon: 0.010
-
-Episode 6000/10000, Avg Reward: 6.98, Epsilon: 0.010
-
-Episode 7000/10000, Avg Reward: 6.97, Epsilon: 0.010
-
-Episode 8000/10000, Avg Reward: 7.33, Epsilon: 0.010
-
-Episode 9000/10000, Avg Reward: 6.99, Epsilon: 0.010
-
-Episode 10000/10000, Avg Reward: 7.75, Epsilon: 0.010
-
-At the end of training (episode 10,000), the average reward over the
-final interval is:
-
-\[\text{Average\ reward} \approx 7.75\]
-
-This indicates convergence toward a near-optimal policy.
-
-\hypertarget{interpretation-of-the-learned-policy}{%
-\subsection{Interpretation of the Learned Policy}\label{interpretation-of-the-learned-policy}}
-
-In Taxi-v3, the reward structure is defined as:
-
-\begin{itemize}
-\item
-  +20 for successful dropoff,
-\item
-  $-1$ per time step,
-\item
-  $-10$ for illegal pickup/dropoff.
-\end{itemize}
-
-An optimal trajectory typically requires between 12 and 14 steps,
-depending on the relative positions of the taxi, passenger, and
-destination. Therefore, the expected reward under an optimal policy can
-be approximated as:
-
-\[20 - \text{(number\ of\ optimal\ steps)} \approx 6\text{–}8.
-\]
-
-The observed training plateau ($\approx 7.7-8.2$) is fully consistent with this
-theoretical estimate, indicating that the agent has learned near-optimal
-trajectories and avoids unnecessary actions.
-
-\hypertarget{evaluation-phase}{%
-\subsection{Evaluation Phase}\label{evaluation-phase}}
-
-After training, the agent was evaluated over 100 episodes using a purely
-greedy policy ($\epsilon$ = 0).
-
-The evaluation results were:
-
-\begin{itemize}
-\item
-  Average reward: 7.93
-\item
-  Minimum reward: 3.00
-\item
-  Maximum reward: 13.00
-\end{itemize}
-
-The evaluation average (7.93) is slightly higher than the training
-plateau. This is expected because exploration is completely disabled
-during evaluation, eliminating occasional suboptimal exploratory
-actions.
-
-The variability between minimum and maximum reward is due to random
-initial configurations. Since the passenger and destination positions
-are randomly sampled, the optimal path length varies. Short optimal
-paths yield higher rewards (up to 13), while longer optimal paths yield
-lower but still positive rewards.
-
-Importantly, no large negative rewards are observed during evaluation.
-This confirms that the agent has learned to avoid illegal actions and
-inefficient trajectories.
-
-\hypertarget{convergence-properties}{%
-\subsection{Convergence properties}\label{convergence-properties}}
-
-The convergence behavior suggests that:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  The Q-table has sufficiently explored and updated the relevant
-  state-action pairs.
-\item
-  The learning rate $\alpha$ allows stable incremental updates.
-\item
-  The $\epsilon$-decay schedule effectively balances exploration and
-  exploitation.
-\end{enumerate}
-
-The stabilization of performance after approximately 4000--5000 episodes
-indicates that the selected hyperparameters are appropriate for the
-Taxi-v3 environment.
-
-Overall, the results demonstrate that tabular Q-learning successfully
-converges to a near-optimal policy in finite, deterministic environments
-with moderate state spaces.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\hypertarget{DQN Part}{%
-\section{DQN part}\label{DQN part}}
+\hypertarget{From Theory to implementation DQN}{%
+\section{From Theory to implementation}\label{From Theory to implementation}}
 
 \hypertarget{Brief introduction}{%
 \subsection{Brief introduction}\label{Brief introduction}}
@@ -1121,22 +876,185 @@ average reward over the last episodes is printed to monitor convergence.
     \label{fig:DQN Agent Training Loop}
 \end{figure}
 
+\hypertarget{evaluation-and-visualization}{%
+\subsection{Evaluation and Visualization}\label{evaluation-and-visualization}}
+
+The function evaluate\_agent, plot\_training\_results and run\_demo are the same of Tabular agent, so are not reported.
+
+\section{Experimental Evaluation: Taxi-v3}
+
+\subsection{Experimental Setup}
+
+
+Both agents were trained for 6000 episodes using:
+
+\begin{itemize}
+    \item Initial exploration rate: $\epsilon_0 = 1.0$
+    \item Minimum exploration rate: $\epsilon_{min} = 0.01$
+    \item Exploration decay values: $\epsilon_{decay} \in \{0.999, 0.997, 0.995\}$
+\end{itemize}
+
+The average reward was computed over sliding windows of 100 episodes.
+
+\subsection{Results with $\epsilon_{decay} = 0.999$}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DQN999.png}
+    \label{DQN}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{Tabular999.png}
+    \label{Tabular}
+\end{figure}
+
+\subsubsection{Deep Q-Network (DQN)}
+
+The DQN agent initially exhibits very negative rewards due to high exploration (approximately $\epsilon \approx 0.9$ during early episodes). During the first 1000 episodes, performance improves steadily from approximately $-750$ to around $-27$. Around episode 2000, the average reward becomes positive, indicating that the agent has learned a reasonably effective policy. In the final phase (episodes 4000--6000), the performance stabilizes between 7 and 8 average reward, with small oscillations likely due to stochastic gradient updates and function approximation noise.
+
+
+\subsubsection{Tabular Q-Learning}
+
+The tabular agent follows a similar learning trajectory but shows slightly faster initial improvement. Performance becomes positive around episode 2100--2300. The convergence phase appears more stable compared to DQN.
+
+
+\subsubsection{Comparative Analysis}
+
+Both approaches reach comparable final performance levels. However, several differences can be observed:
+
+\begin{itemize}
+    \item \textbf{Convergence speed:} Tabular Q-learning improves slightly faster in early training, becoming positive around episodes 2100--2300 versus DQN's similar trajectory.
+    \item \textbf{Stability:} Tabular learning exhibits lower variance during convergence, while DQN shows small oscillations due to stochastic optimization.
+    \item \textbf{Final performance:} Both methods converge to similar average rewards ($\approx 7.2$--$7.7$), with DQN achieving 7.72 and Tabular achieving 7.19.
+\end{itemize}
+
+\subsubsection{Discussion}
+
+The results are consistent with theoretical expectations. Taxi-v3 has a small, fully discrete state space (500 states). In such settings, tabular Q-learning can directly estimate the optimal action-value function $Q^*(s,a)$ without requiring function approximation. DQN approximates the Q-function using a neural network, which does not provide significant advantages for small discrete environments but may introduce additional variance due to stochastic optimization. The slower decay ($\epsilon_{decay}=0.999$) allows extensive exploration and produces stable long-run performance for both methods.
+
+\subsection{Results with $\epsilon_{decay} = 0.997$}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DQN997.png}
+    \label{DQN}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{Tabular997.png}
+    \label{Tabular}
+\end{figure}
+
+\subsubsection{Deep Q-Network (DQN)}
+
+With a faster exploration decay ($\epsilon_{decay}=0.997$), the agent reduces random exploration more quickly compared to the $\epsilon_{decay}=0.999$ setting. Early phase improvement is substantially faster: by episode 600 the average reward reaches approximately $-16.59$, and becomes positive already around episode 900 (Avg Reward $\approx 2.40$). The agent reaches the minimum exploration rate $\epsilon_{min}=0.01$ around episode 1600. During the mid-training phase (roughly episodes 1300--4500), the average reward remains mostly in the 7--8 range, indicating that an effective policy has been learned. However, the last part of training exhibits a noticeable degradation, culminating in a final average reward of approximately 5.34 at episode 6000. This late drop suggests instability typical of function approximation, where continued updates can slightly deteriorate a previously good policy.
 
 
 
+\subsubsection{Tabular Q-Learning}
+
+The tabular agent also benefits from the faster decay and exhibits rapid, stable learning progression. By episode 400 the average reward improves to approximately $-26.38$. The average reward becomes positive around episode 700. After reaching $\epsilon_{min}=0.01$ around episode 1600, performance stabilizes in the 7--8 range with relatively low variance. Unlike DQN, tabular Q-learning does not show a significant late-training collapse, with final reward remaining consistent with the plateau achieved during convergence.
 
 
+\subsubsection{Comparative Analysis}
+
+Both agents benefit from faster exploration reduction, but exhibit contrasting stability profiles:
+
+\begin{itemize}
+    \item \textbf{Convergence speed:} Both methods achieve positive rewards far earlier compared to $\epsilon_{decay}=0.999$ (around episodes 700--900 vs 2100--2400), with DQN reaching positive rewards by episode 900 and Tabular by episode 700.
+    \item \textbf{Stability:} Tabular Q-learning remains stable throughout training and converges smoothly, while DQN exhibits late-training degradation with oscillations and drops.
+    \item \textbf{Final performance:} Tabular achieves 7.57 versus DQN's 5.34, representing a significant difference of 2.23 in average reward at episode 6000.
+\end{itemize}
+
+\subsubsection{Discussion}
+
+The faster decay ($\epsilon_{decay}=0.997$) accelerates learning early on, especially in Taxi-v3 where the state space is limited and exploration can be reduced sooner. However, it reveals a critical instability in DQN: when exploration becomes too small too early, replay buffers can become less diverse and the network may overfit to a narrow set of trajectories. Continued gradient updates can then degrade a previously good policy due to bootstrapping and approximation error accumulation. Tabular Q-learning, with its exact representation of $Q(s,a)$, remains robust and does not exhibit this instability, making it more reliable for aggressive exploration decay schedules.
+
+\subsection{Results with $\epsilon_{decay} = 0.995$}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DQN_0995_6000_Episodes.png}
+    \label{DQN}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{Tabular_0995_6000_Episodes.png}
+    \label{Tabular}
+\end{figure}
+
+\subsubsection{Deep Q-Network (DQN)}
+
+Using a faster exploration decay ($\epsilon_{decay}=0.995$) strongly accelerates the transition from exploration to exploitation. The agent becomes positive very early: by episode 600 the average reward is already $\approx 2.60$. The minimum exploration rate ($\epsilon_{min}=0.01$) is reached around episode 1000, meaning that after this point the policy is almost purely greedy. After reaching the exploitation regime, the DQN performance remains mostly around 7--8 for a large portion of training, but it displays several significant drops (e.g., around episode 4000 and later). The final recorded average reward is approximately 5.04 at episode 6000, suggesting late-training instability.
 
 
+\subsubsection{Tabular Q-Learning}
+
+The tabular agent behaves differently under $\epsilon_{decay}=0.995$. Early learning is slower compared to DQN in this configuration (still negative at episode 1000 with Avg Reward $\approx -2.78$). After episode 1100 the average reward becomes positive and then steadily increases. The convergence phase is stable, with rewards consistently in the 7--8 range for most of the remaining training. Unlike DQN, tabular Q-learning maintains stable performance until the end of training, achieving a strong final average reward.
 
 
+\subsubsection{Comparative Analysis}
 
+The $\epsilon_{decay}=0.995$ setting reveals the most pronounced differences between the two approaches:
 
+\begin{itemize}
+    \item \textbf{Convergence speed:} DQN becomes positive much earlier (episode 600) than Tabular (episode 1100), despite Tabular entering the exploitation regime later, demonstrating the rapid initial learning of DQN with aggressive decay.
+    \item \textbf{Stability:} Tabular maintains consistent 7--8 range performance throughout training, while DQN degrades significantly in the final phase with multiple performance drops.
+    \item \textbf{Final performance:} Tabular achieves 7.34 versus DQN's 5.04, representing the largest performance gap of all tested decay schedules, with a difference of 2.30 in average reward.
+\end{itemize}
 
+\subsubsection{Discussion}
 
+The most aggressive decay ($\epsilon_{decay}=0.995$) demonstrates a critical vulnerability in DQN: premature reduction of exploration combined with continuous stochastic gradient updates leads to performance collapse. When exploration is minimized around episode 1000, the replay buffer becomes dominated by a narrow range of experiences. Subsequent updates reinforce potentially suboptimal patterns, and the neural network architecture lacks the robust recovery mechanisms of tabular methods. Tabular Q-learning's exact value storage prevents this degradation: even with aggressive decay, the table maintains accurate estimates for all visited state-action pairs. This experiment highlights an important practical consideration: DQN requires more careful tuning of exploration schedules to maintain stability, whereas tabular methods are more forgiving to aggressive exploration decay in small discrete environments.
 
+\section{Overall Comparative Analysis}
 
+The comparison between DQN and Tabular Q-learning can be better understood by analyzing overall learning dynamics, convergence speed, stability, and sensitivity to exploration scheduling.
 
+\subsection{Learning Dynamics}
 
+Across all tested $\epsilon_{decay}$ values:
+
+\begin{itemize}
+    \item Faster decay rates (0.995, 0.997) accelerate early learning for DQN.
+    \item Slower decay (0.999) delays convergence but produces smoother long-term behavior.
+    \item Tabular Q-learning exhibits consistent and predictable improvement across all decay configurations.
+\end{itemize}
+
+\subsection{Stability}
+
+The most significant difference emerges in training stability:
+
+\begin{itemize}
+    \item Tabular Q-learning shows low variance once convergence is reached.
+    \item DQN displays higher oscillations and occasional late-stage degradation, especially under faster decay rates.
+\end{itemize}
+
+This suggests that DQN is more sensitive to exploration scheduling, while tabular learning remains robust.
+
+\subsection{Performance Plateau}
+
+When observing the performance plateau (approximately episodes 1500–5000):
+
+\begin{itemize}
+    \item Both methods consistently achieve average rewards in the 7–8 range.
+    \item Tabular learning maintains this plateau more steadily.
+    \item DQN often reaches the plateau earlier (with fast decay), but may fluctuate afterward.
+\end{itemize}
+
+\subsection{General Interpretation}
+
+In Taxi-v3, a small and fully discrete environment:
+
+\begin{itemize}
+    \item Tabular Q-learning provides stable and reliable convergence across exploration schedules.
+    \item DQN can achieve comparable performance but requires more careful tuning of $\epsilon_{decay}$ to avoid instability.
+\end{itemize}
+
+Overall, the trend analysis indicates that while DQN can learn quickly under aggressive decay settings, tabular Q-learning offers greater robustness and consistency in this domain.
 
 \end{document}
