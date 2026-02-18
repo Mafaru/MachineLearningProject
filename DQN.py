@@ -78,19 +78,7 @@ class DQNAgent:
     def __init__(self, n_states, n_actions, alpha=0.1, gamma=0.99, 
                  epsilon=1.0, epsilon_decay=0.995, epsilon_min=0.01,
                  batch_size=64, buffer_size=50000, min_buffer_size=1000,
-                  max_steps_per_episode=200):
-        """
-        Initializes the DQN agent
-        
-        Args:
-            n_states: Number of states in the environment, for taxi v3 there are 500
-            n_actions: Number of available actions which is 6
-            alpha: Learning rate which is the learning speed
-            gamma: Discount factor, used to balance the importance of future rewards compared to immediate ones
-            epsilon: Initial exploration rate, set to 1 to explore a lot at the beginning and decrease over time
-            epsilon_decay: Decay factor for epsilon, this is the rate at which epsilon decreases after each episode, used in the decay_epsilon function
-            epsilon_min: Minimum value of epsilon, a minimum value is kept to prevent it from becoming 0 and therefore never exploring again
-        """
+                  ):
         
         self.n_states = n_states # 500
         self.n_actions = n_actions # 6 = south, north, west, east, pickup, dropoff
@@ -105,18 +93,14 @@ class DQNAgent:
         self.batch_size = batch_size
         self.buffer_size = buffer_size
         self.min_buffer_size = min_buffer_size
-        self.max_steps_per_episode = max_steps_per_episode
         
         #REPLAY BUFFER
         self.buffer = ReplayBuffer(self.buffer_size)
 
         # NEURAL NETWORK
         self.q_network = QNetwork(n_states, n_actions)
-        #first optimizer
-        #self.optimizer = torch.optim.Adam(self.q_network.parameters(), lr=self.alpha)
         self.optimizer = torch.optim.Adam(self.q_network.parameters(), lr=1e-3) 
-        self.loss_fn = nn.MSELoss() #questo è l'errore quadratico medio, usato per calcolare la differenza tra i Q-values predetti dalla rete e i target Q-values calcolati durante l'addestramento
-
+        
 
     #trasform the state number into a vector with all zeros, exept the number of state
     def one_hot(self, state):
@@ -126,16 +110,7 @@ class DQNAgent:
 
 
     def select_action(self, state, training=True):
-        """
-        Agent policy: epsilon-greedy
         
-        Args:
-            state: Current state
-            training: If True uses epsilon-greedy, otherwise greedy
-            
-        Returns:
-            Selected action
-        """
         # ε-greedy exploration
         if training and np.random.random() < self.epsilon:
             return np.random.randint(self.n_actions)
@@ -150,6 +125,7 @@ class DQNAgent:
     
 
     def train_step(self):
+
         if len(self.buffer) < self.min_buffer_size:
             return
 
@@ -191,22 +167,14 @@ class DQNAgent:
 
 
     def decay_epsilon(self):
-        """Applies decay to epsilon"""
-        #TOO FAST with decay of 0.995
+        
         self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay) # decreases epsilon by multiplying it by the decay factor, but does not let it go below epsilon_min
         
-        #WE HAVE TO MODIFY THIS
-        #self.epsilon = self.epsilon_min + (self.epsilon_start - self.epsilon_min) * exp(-self.decay_rate * episode)
-
 
 def warmup(env, agent):
-        """
-        Fills the replay buffer with random experiences
-        before training starts.
-        """
+        
         np.random.seed(0)
         state, _ = env.reset(seed=0)
-        steps = 0
         
         print("Starting Warm Up Phase....")
 
@@ -228,12 +196,10 @@ def warmup(env, agent):
             agent.buffer.push(new_transition)
             
             state = next_state
-            steps += 1
             
             # Reset episode if finished
-            if done or truncated or steps >= agent.max_steps_per_episode:
+            if done or truncated: #or steps >= agent.max_steps_per_episode:
                 state, _ = env.reset()
-                steps = 0
             
         
         #calculate delta
@@ -244,19 +210,7 @@ def warmup(env, agent):
 
 
 def train_agent(env, agent, num_episodes=2000, print_interval=100):
-    """
-    Trains the agent in the environment
     
-    Args:
-        env: Gymnasium environment
-        agent: QLearningAgent
-        num_episodes: Number of training episodes
-        print_interval: Interval for printing progress
-        
-    Returns:
-        rewards_history: List of rewards per episode
-        epsilon_history: List of epsilon values
-    """
     rewards_history = []
     epsilon_history = []
     
@@ -293,9 +247,6 @@ def train_agent(env, agent, num_episodes=2000, print_interval=100):
             state = next_state
             total_reward += reward
             step += 1
-
-            #if done or truncated:
-            #    break
         
         # Decay epsilon
         agent.decay_epsilon()
@@ -322,17 +273,7 @@ def train_agent(env, agent, num_episodes=2000, print_interval=100):
 
 
 def evaluate_agent(env, agent, num_episodes=100):
-    """
-    Evaluates the agent's performance
     
-    Args:
-        env: Gymnasium environment
-        agent: Trained QLearningAgent
-        num_episodes: Number of evaluation episodes
-        
-    Returns:
-        test_rewards: List of obtained rewards
-    """
     print("\nEvaluating agent...")
     test_rewards = []
     
@@ -422,10 +363,10 @@ def run_demo(env_name, agent):
 
 
 def main():
-    """Main function"""
+
     # Parameters
     env_name = "Taxi-v3"
-    num_episodes = 2000
+    num_episodes = 4000
     num_test_episodes = 100
     
     # Create environment
@@ -463,8 +404,6 @@ def main():
 
     #RUN DEMO
     run_demo(env_name,dqnagent)
-
-
     
     # Close environment
     env.close()
