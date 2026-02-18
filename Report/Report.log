@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.16)  17 FEB 2026 23:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.16)  18 FEB 2026 02:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -465,281 +465,281 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 183.
  [3{c:/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}] [4] [5]
-<image2.png, id=64, 483.7272pt x 203.3196pt>
+<image2.png, id=65, 483.7272pt x 203.3196pt>
 File: image2.png Graphic file (type png)
 <use image2.png>
-Package pdftex.def Info: image2.png  used on input line 393.
+Package pdftex.def Info: image2.png  used on input line 388.
 (pdftex.def)             Requested size: 276.00046pt x 116.00815pt.
  [6
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.411 \end{itemize}
-                    <./image2.png>]
-<image3.png, id=80, 390.258pt x 91.542pt>
+l.413 
+       <./image2.png>]
+<image3.png, id=79, 390.258pt x 91.542pt>
 File: image3.png Graphic file (type png)
 <use image3.png>
-Package pdftex.def Info: image3.png  used on input line 421.
+Package pdftex.def Info: image3.png  used on input line 416.
 (pdftex.def)             Requested size: 276.00133pt x 64.74104pt.
-<image4.png, id=81, 483.7272pt x 48.18pt>
+<image4.png, id=80, 483.7272pt x 48.18pt>
 File: image4.png Graphic file (type png)
 <use image4.png>
-Package pdftex.def Info: image4.png  used on input line 441.
+Package pdftex.def Info: image4.png  used on input line 436.
 (pdftex.def)             Requested size: 276.00046pt x 27.49007pt.
-<image5.png, id=82, 483.7272pt x 52.0344pt>
+<image5.png, id=81, 483.7272pt x 52.0344pt>
 File: image5.png Graphic file (type png)
 <use image5.png>
-Package pdftex.def Info: image5.png  used on input line 459.
+Package pdftex.def Info: image5.png  used on input line 454.
 (pdftex.def)             Requested size: 276.00046pt x 29.68927pt.
  [7
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.464 ...tion{Training Loop}\label{training-loop}}
-                                                  
+l.466 
+      
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.464 ...tion{Training Loop}\label{training-loop}}
-                                                   <./image3.png> <./image4.png>]
-<image6.png, id=96, 264.5082pt x 370.0224pt>
-File: image6.png Graphic file (type png)
-<use image6.png>
-Package pdftex.def Info: image6.png  used on input line 490.
-(pdftex.def)             Requested size: 264.51964pt x 370.03842pt.
- [8
+l.466 
+      
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.494 
-       <./image5.png>]
-<image7.png, id=109, 330.5148pt x 188.8656pt>
+l.466 
+       <./image3.png> <./image4.png> <./image5.png>]
+<image6.png, id=98, 264.5082pt x 370.0224pt>
+File: image6.png Graphic file (type png)
+<use image6.png>
+Package pdftex.def Info: image6.png  used on input line 485.
+(pdftex.def)             Requested size: 264.51964pt x 370.03842pt.
+ [8]
+<image7.png, id=108, 330.5148pt x 188.8656pt>
 File: image7.png Graphic file (type png)
 <use image7.png>
-Package pdftex.def Info: image7.png  used on input line 508.
+Package pdftex.def Info: image7.png  used on input line 503.
 (pdftex.def)             Requested size: 207.01pt x 118.29141pt.
  [9
 pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.512 
+l.507 
        <./image6.png>]
-<image8.png, id=118, 331.9602pt x 310.761pt>
+<image8.png, id=117, 331.9602pt x 310.761pt>
 File: image8.png Graphic file (type png)
 <use image8.png>
-Package pdftex.def Info: image8.png  used on input line 515.
+Package pdftex.def Info: image8.png  used on input line 510.
 (pdftex.def)             Requested size: 207.00354pt x 193.78415pt.
-<image9.png, id=119, 331.4784pt x 180.675pt>
+<image9.png, id=118, 331.4784pt x 180.675pt>
 File: image9.png Graphic file (type png)
 <use image9.png>
-Package pdftex.def Info: image9.png  used on input line 522.
+Package pdftex.def Info: image9.png  used on input line 517.
 (pdftex.def)             Requested size: 207.00656pt x 112.83061pt.
  [10
 pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.544 
+l.539 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.8}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.544 
+l.539 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.9}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.544 
+l.539 
        <./image7.png> <./image8.png> <./image9.png>] [11]
-<Transition_Class.png, id=141, 166.221pt x 121.95563pt>
+<Transition_Class.png, id=140, 166.221pt x 121.95563pt>
 File: Transition_Class.png Graphic file (type png)
 <use Transition_Class.png>
-Package pdftex.def Info: Transition_Class.png  used on input line 631.
+Package pdftex.def Info: Transition_Class.png  used on input line 626.
 (pdftex.def)             Requested size: 166.2231pt x 121.95715pt.
-<ReplayBufferClass.png, id=142, 278.54062pt x 127.07475pt>
+<ReplayBufferClass.png, id=141, 278.54062pt x 127.07475pt>
 File: ReplayBufferClass.png Graphic file (type png)
 <use ReplayBufferClass.png>
-Package pdftex.def Info: ReplayBufferClass.png  used on input line 644.
+Package pdftex.def Info: ReplayBufferClass.png  used on input line 639.
 (pdftex.def)             Requested size: 276.00682pt x 125.91878pt.
  [12
 pdfTeX warning (ext4): destination with the same identifier (name{figure.10}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.647 \end{figure}
+l.642 \end{figure}
                    <./Transition_Class.png>]
-<QNetworkClass.png, id=162, 338.76563pt x 205.36725pt>
+<QNetworkClass.png, id=161, 338.76563pt x 205.36725pt>
 File: QNetworkClass.png Graphic file (type png)
 <use QNetworkClass.png>
-Package pdftex.def Info: QNetworkClass.png  used on input line 658.
+Package pdftex.def Info: QNetworkClass.png  used on input line 653.
 (pdftex.def)             Requested size: 276.01141pt x 167.32425pt.
  [13
 pdfTeX warning (ext4): destination with the same identifier (name{figure.11}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.672   \(
+l.667   \(
           \gamma\)(discount factor) controls the importance of future rewards.
 pdfTeX warning (ext4): destination with the same identifier (name{figure.12}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.672   \(
+l.667   \(
           \gamma\)(discount factor) controls the importance of future rewards. <./ReplayBufferClass.png> <./QNetworkClass.png>]
-<DQNAgent_init.png, id=176, 411.03563pt x 341.77687pt>
+<DQNAgent_init.png, id=175, 411.03563pt x 341.77687pt>
 File: DQNAgent_init.png Graphic file (type png)
 <use DQNAgent_init.png>
-Package pdftex.def Info: DQNAgent_init.png  used on input line 691.
+Package pdftex.def Info: DQNAgent_init.png  used on input line 686.
 (pdftex.def)             Requested size: 276.00081pt x 229.49518pt.
-<OneHot.png, id=177, 412.54124pt x 69.25874pt>
+<OneHot.png, id=176, 412.54124pt x 69.25874pt>
 File: OneHot.png Graphic file (type png)
 <use OneHot.png>
-Package pdftex.def Info: OneHot.png  used on input line 703.
+Package pdftex.def Info: OneHot.png  used on input line 698.
 (pdftex.def)             Requested size: 276.00462pt x 46.33652pt.
  [14
 pdfTeX warning (ext4): destination with the same identifier (name{figure.13}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.707 
+l.702 
        <./DQNAgent_init.png>]
 pdfTeX warning (ext4): destination with the same identifier (name{action-selection-epsilon-greedy-policy}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.710 ...{action-selection-epsilon-greedy-policy}}
+l.705 ...{action-selection-epsilon-greedy-policy}}
                                                   
-<SelectAction.png, id=187, 272.51813pt x 164.11313pt>
+<SelectAction.png, id=186, 272.51813pt x 164.11313pt>
 File: SelectAction.png Graphic file (type png)
 <use SelectAction.png>
-Package pdftex.def Info: SelectAction.png  used on input line 732.
+Package pdftex.def Info: SelectAction.png  used on input line 727.
 (pdftex.def)             Requested size: 272.5216pt x 164.11522pt.
  [15
 pdfTeX warning (ext4): destination with the same identifier (name{figure.14}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.829 
+l.824 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.15}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.829 
+l.824 
        <./OneHot.png> <./SelectAction.png>]
-<TrainStep.png, id=199, 385.44pt x 473.3685pt>
+<TrainStep.png, id=198, 385.44pt x 473.3685pt>
 File: TrainStep.png Graphic file (type png)
 <use TrainStep.png>
-Package pdftex.def Info: TrainStep.png  used on input line 832.
+Package pdftex.def Info: TrainStep.png  used on input line 827.
 (pdftex.def)             Requested size: 275.9992pt x 338.96152pt.
-<EpsilonDecay.png, id=200, 363.45787pt x 39.14626pt>
+<EpsilonDecay.png, id=199, 363.45787pt x 39.14626pt>
 File: EpsilonDecay.png Graphic file (type png)
 <use EpsilonDecay.png>
-Package pdftex.def Info: EpsilonDecay.png  used on input line 853.
+Package pdftex.def Info: EpsilonDecay.png  used on input line 848.
 (pdftex.def)             Requested size: 276.01454pt x 29.72815pt.
  [16
 pdfTeX warning (ext4): destination with the same identifier (name{figure.16}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.857 
+l.852 
        <./TrainStep.png>]
-<Warmup.png, id=209, 396.58162pt x 511.00912pt>
+<Warmup.png, id=208, 396.58162pt x 511.00912pt>
 File: Warmup.png Graphic file (type png)
 <use Warmup.png>
-Package pdftex.def Info: Warmup.png  used on input line 864.
+Package pdftex.def Info: Warmup.png  used on input line 859.
 (pdftex.def)             Requested size: 276.00768pt x 355.64545pt.
-<TrainAgent.png, id=210, 357.43538pt x 601.34662pt>
+<TrainAgent.png, id=209, 357.43538pt x 601.34662pt>
 File: TrainAgent.png Graphic file (type png)
 <use TrainAgent.png>
-Package pdftex.def Info: TrainAgent.png  used on input line 879.
+Package pdftex.def Info: TrainAgent.png  used on input line 874.
 (pdftex.def)             Requested size: 276.02237pt x 464.37799pt.
  [17
 pdfTeX warning (ext4): destination with the same identifier (name{figure.17}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.882 \end{figure}
+l.877 \end{figure}
                   
 pdfTeX warning (ext4): destination with the same identifier (name{figure.18}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.882 \end{figure}
+l.877 \end{figure}
                    <./EpsilonDecay.png> <./Warmup.png>] [18] [19
 pdfTeX warning (ext4): destination with the same identifier (name{figure.19}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.892     \item I
+l.887     \item I
                  nitial exploration rate: $\epsilon_0 = 1.0$ <./TrainAgent.png>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 899.
+(hyperref)                removing `math shift' on input line 894.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\epsilon' on input line 899.
+(hyperref)                removing `\epsilon' on input line 894.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 899.
+(hyperref)                removing `subscript' on input line 894.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 899.
+(hyperref)                removing `math shift' on input line 894.
 
-<DQN999.png, id=234, 991.3035pt x 314.3745pt>
+<DQN999.png, id=233, 991.3035pt x 314.3745pt>
 File: DQN999.png Graphic file (type png)
 <use DQN999.png>
-Package pdftex.def Info: DQN999.png  used on input line 903.
+Package pdftex.def Info: DQN999.png  used on input line 898.
 (pdftex.def)             Requested size: 344.99503pt x 109.4091pt.
-<Tabular999.png, id=235, 899.15926pt x 296.307pt>
+<Tabular999.png, id=234, 899.15926pt x 296.307pt>
 File: Tabular999.png Graphic file (type png)
 <use Tabular999.png>
-Package pdftex.def Info: Tabular999.png  used on input line 909.
+Package pdftex.def Info: Tabular999.png  used on input line 904.
 (pdftex.def)             Requested size: 344.9906pt x 113.68745pt.
 [20 <./DQN999.png> <./Tabular999.png>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 937.
+(hyperref)                removing `math shift' on input line 932.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\epsilon' on input line 937.
+(hyperref)                removing `\epsilon' on input line 932.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 937.
+(hyperref)                removing `subscript' on input line 932.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 937.
+(hyperref)                removing `math shift' on input line 932.
 
-<DQN997.png, id=249, 999.735pt x 305.943pt>
+<DQN997.png, id=248, 999.735pt x 305.943pt>
 File: DQN997.png Graphic file (type png)
 <use DQN997.png>
-Package pdftex.def Info: DQN997.png  used on input line 941.
+Package pdftex.def Info: DQN997.png  used on input line 936.
 (pdftex.def)             Requested size: 345.00047pt x 105.57845pt.
-<Tabular997.png, id=250, 901.56825pt x 299.31825pt>
+<Tabular997.png, id=249, 901.56825pt x 299.31825pt>
 File: Tabular997.png Graphic file (type png)
 <use Tabular997.png>
-Package pdftex.def Info: Tabular997.png  used on input line 947.
+Package pdftex.def Info: Tabular997.png  used on input line 942.
 (pdftex.def)             Requested size: 344.99318pt x 114.5368pt.
 [21 <./DQN997.png>] [22 <./Tabular997.png>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 976.
+(hyperref)                removing `math shift' on input line 971.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\epsilon' on input line 976.
+(hyperref)                removing `\epsilon' on input line 971.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 976.
+(hyperref)                removing `subscript' on input line 971.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 976.
+(hyperref)                removing `math shift' on input line 971.
 
-<DQN_0995_6000_Episodes.png, id=268, 1110.7899pt x 361.35pt>
+<DQN_0995_6000_Episodes.png, id=267, 1110.7899pt x 361.35pt>
 File: DQN_0995_6000_Episodes.png Graphic file (type png)
 <use DQN_0995_6000_Episodes.png>
-Package pdftex.def Info: DQN_0995_6000_Episodes.png  used on input line 980.
+Package pdftex.def Info: DQN_0995_6000_Episodes.png  used on input line 975.
 (pdftex.def)             Requested size: 344.98538pt x 112.22687pt.
-<Tabular_0995_6000_Episodes.png, id=269, 867.24pt x 289.08pt>
+<Tabular_0995_6000_Episodes.png, id=268, 867.24pt x 289.08pt>
 File: Tabular_0995_6000_Episodes.png Graphic file (type png)
 <use Tabular_0995_6000_Episodes.png>
-Package pdftex.def Info: Tabular_0995_6000_Episodes.png  used on input line 986.
+Package pdftex.def Info: Tabular_0995_6000_Episodes.png  used on input line 981.
 (pdftex.def)             Requested size: 344.99754pt x 114.99918pt.
 [23 <./DQN_0995_6000_Episodes.png> <./Tabular_0995_6000_Episodes.png>] [24] [25] [26] (./Report.aux)
  ***********
@@ -758,12 +758,12 @@ Here is how much of TeX's memory you used:
  41887 multiletter control sequences out of 15000+600000
  686130 words of font info for 162 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 83i,9n,93p,1056b,553s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr17.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy5.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Report.pdf (26 pages, 2982525 bytes).
+ 83i,9n,93p,1056b,534s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr17.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy5.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy7.pfb>
+Output written on Report.pdf (26 pages, 2979298 bytes).
 PDF statistics:
- 567 PDF objects out of 1000 (max. 8388607)
- 450 compressed objects within 5 object streams
+ 562 PDF objects out of 1000 (max. 8388607)
+ 447 compressed objects within 5 object streams
  143 named destinations out of 1000 (max. 500000)
  33310 words of extra memory for PDF output out of 35830 (max. 10000000)
 

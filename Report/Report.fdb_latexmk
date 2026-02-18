@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1771367679.69016 "c:/Users/mario/Desktop/MachineLearningProject/Report/Report.tex" "Report.pdf" "Report" 1771367686.27111 0
+["pdflatex"] 1771379132.90633 "c:/Users/mario/Desktop/MachineLearningProject/Report/Report.tex" "Report.pdf" "Report" 1771379139.43032 0
   "DQN997.png" 1771362494 98789 dad2e18c928c06bbee3fa2bc3a43823c ""
   "DQN999.png" 1771361867 104341 429f0f3f29f35d4ce5a2ef7acd66a966 ""
   "DQNAgent_init.png" 1771349273 188974 6be2931a735f3b318fd1ec04c7928b3d ""
@@ -8,8 +8,8 @@
   "OneHot.png" 1771349273 35139 83e14b4b7371c4537c71b414d61898fe ""
   "QNetworkClass.png" 1771349273 92165 2a80d807b1906ae310c1a330f6321c4e ""
   "ReplayBufferClass.png" 1771349273 44949 27ee4a1500ce2ca575904cc3eee91df9 ""
-  "Report.aux" 1771367685 28383 e6516058250ece6aef0083c658f85ab3 "pdflatex"
-  "Report.tex" 1771367671 40411 a9419f76b42887bfa54f6235fad73207 ""
+  "Report.aux" 1771379139 28382 83e9c44669b3bd3f07aadc86e62e8101 "pdflatex"
+  "Report.tex" 1771379124 40216 4502244ddcc1774f7f5240bf56b3e3ec ""
   "SelectAction.png" 1771349273 80311 866e17ba6a2aa315687c3f47778538b8 ""
   "Tabular997.png" 1771362578 88901 41750df06e528f5449717482f7bfc3cd ""
   "Tabular999.png" 1771361931 94547 3e23586dddfdf455e4141ba1f6112946 ""
@@ -18,7 +18,7 @@
   "TrainStep.png" 1771349273 243926 a1f129de11defd66344da7ea3f7f9e4a ""
   "Transition_Class.png" 1771349273 33157 fdbf78cd19f1c83d3606d9855ffbdd55 ""
   "Warmup.png" 1771349273 213663 d45cd876ea087dd6ded8f79e36e61aea ""
-  "c:/Users/mario/Desktop/MachineLearningProject/Report/Report.tex" 1771367671 40411 a9419f76b42887bfa54f6235fad73207 ""
+  "c:/Users/mario/Desktop/MachineLearningProject/Report/Report.tex" 1771379124 40216 4502244ddcc1774f7f5240bf56b3e3ec ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc" 1771239876 2375 baa924870cfb487815765f9094cf3728 ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc" 1771239876 3486 c7eadf5dcc57b3b2d11736679f6636ba ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc" 1771239876 2405 5dcf2c1b967ee25cc46c58cd52244aed ""
@@ -58,7 +58,6 @@
   "c:/texlive/2025/texmf-dist/fonts/tfm/public/lm/rm-lmr7.tfm" 1771239877 11852 5a9022f105fd1ee2797df861e79ae9a0 ""
   "c:/texlive/2025/texmf-dist/fonts/tfm/public/lm/rm-lmr8.tfm" 1771239877 11864 309fd7f43e4a0ba39f6f7644d76e8edf ""
   "c:/texlive/2025/texmf-dist/fonts/tfm/public/lm/ts1-lmr10.tfm" 1771239877 1556 b86d923e6b2f9aab2e313098a95cb0b8 ""
-  "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1771232426 34694 870c211f62cb72718a00e353f14f254d ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb" 1771239877 121021 836464b5fe0c782d94085eb083550ccc ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx12.pfb" 1771239877 116908 9a7a12d1e4df280ea0ab4aad83cdef88 ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/lm/lmex10.pfb" 1771239877 23055 2e5b42921de910eaa97b85df04ca4891 ""
