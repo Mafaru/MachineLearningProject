@@ -61,11 +61,11 @@ class QNetwork(nn.Module):
 
         super(QNetwork, self).__init__()
         
-        self.fc1 = nn.Linear(n_states, 128) 
-        self.fc2 = nn.Linear(128, 128) 
-        self.out = nn.Linear(128, n_actions) 
+        self.fc1 = nn.Linear(n_states, 128) #trasforma gli n_stati in un vettore di 128 elementi, questo è il primo strato completamente connesso
+        self.fc2 = nn.Linear(128, 128) #trasforma il vettore di 128 elementi in un altro vettore di 128 elementi, questo è il secondo strato completamente connesso
+        self.out = nn.Linear(128, n_actions) #trasforma il vettore di 128 elementi in un vettore con n_actions elementi, questo è lo strato di output che fornisce i Q-values per ogni azione possibile nello stato dato
 
-    def forward(self, x): 
+    def forward(self, x):
         x = F.relu(self.fc1(x)) 
         x = F.relu(self.fc2(x))
         return self.out(x)  # Q-values for all actions
@@ -100,8 +100,7 @@ class DQNAgent:
         # NEURAL NETWORK
         self.q_network = QNetwork(n_states, n_actions)
         self.optimizer = torch.optim.Adam(self.q_network.parameters(), lr=1e-3) 
-        self.loss_fn = nn.MSELoss() #questo è l'errore quadratico medio, usato per calcolare la differenza tra i Q-values predetti dalla rete e i target Q-values calcolati durante l'addestramento
-
+        
 
     #trasform the state number into a vector with all zeros, exept the number of state
     def one_hot(self, state):
@@ -122,7 +121,7 @@ class DQNAgent:
         with torch.no_grad():
             q_values = self.q_network(state_tensor) # Q-values for all actions in the current state
 
-        return torch.argmax(q_values).item() 
+        return torch.argmax(q_values).item() #questo restituisce l'indice dell'azione con il Q-value più alto, che è l'azione che il DQN ritiene migliore in base alla sua attuale stima
     
 
     def train_step(self):
@@ -130,7 +129,7 @@ class DQNAgent:
         if len(self.buffer) < self.min_buffer_size:
             return
 
-        batch = self.buffer.sample(self.batch_size) 
+        batch = self.buffer.sample(self.batch_size) # questo è un campione di transizioni, è una lista di oggetti Transition, ognuno con state, action, reward, next_state e done, casuali.
         batch_size = len(batch)
 
         # Preallocate tensors
@@ -149,16 +148,17 @@ class DQNAgent:
             dones[i] = t.done
 
         # Compute current Q(s, a)
-        q_values = self.q_network(states) 
-        q_sa = q_values.gather(1, actions.unsqueeze(1)).squeeze(1) 
+        q_values = self.q_network(states) #restituisce i Q-values per tutte le azioni in tutti gli stati del batch, è una matrice di dimensione (batch_size, n_actions)
+        q_sa = q_values.gather(1, actions.unsqueeze(1)).squeeze(1) #qui invece prende il Q value solo dell'azione che stiamo eseguendo.
 
         # Compute target Q-values
         with torch.no_grad():
-            next_q_values = self.q_network(next_states) 
-            max_next_q = next_q_values.max(dim=1)[0] 
-            targets = rewards + self.gamma * max_next_q * (1 - dones) 
+            next_q_values = self.q_network(next_states) #calcola i q_values per gli stati successivi.
+            max_next_q = next_q_values.max(dim=1)[0] #per ogni riga prende il massimo Q value.
+            targets = rewards + self.gamma * max_next_q * (1 - dones) #e questo vettore di massimi Q values viene usato per calcolare i target Q values, che sono la ricompensa immediata più il valore scontato del miglior Q value del prossimo stato, moltiplicato per (1 - done) per azzerare il target se l'episodio è finito.
+
         # Compute loss
-        loss = F.mse_loss(q_sa, targets) 
+        loss = F.mse_loss(q_sa, targets) #questo è importante, perche confronta i Q values predetti dalla rete q_sa con i target Q values, se la differenza è tanta significa che la rete non sta facendo un buon lavoro nel predire i Q values corretti, e quindi il loss sarà alto, se invece la differenza è piccola, significa che la rete sta predicendo bene i Q values, e quindi il loss sarà basso. L'obiettivo dell'addestramento è minimizzare questo loss, in modo che la rete impari a predire Q values più accurati.
 
         # Backprop
         self.optimizer.zero_grad()
@@ -172,10 +172,7 @@ class DQNAgent:
         
 
 def warmup(env, agent):
-        """
-        Fills the replay buffer with random experiences
-        before training starts.
-        """
+        
         np.random.seed(0)
         state, _ = env.reset(seed=0)
         
@@ -283,7 +280,7 @@ def evaluate_agent(env, agent, num_episodes=100):
     for episode in range(num_episodes): 
         state, _ = env.reset()
         done = False
-        truncated = False 
+        truncated = False # truncated is used for environments with step limits like taxi v3
         total_reward = 0
         
         while not done and not truncated:   
@@ -387,7 +384,6 @@ def main():
         batch_size=64,
         buffer_size=50000,
         min_buffer_size=1000,
-        max_steps_per_episode=200
     )
 
     print(f"\nAgent's Parameters:\n\n Epsilon decay:", dqnagent.epsilon_decay , "\n Batch size:", dqnagent.batch_size , 
