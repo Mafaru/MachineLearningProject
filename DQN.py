@@ -268,9 +268,12 @@ def train_agent(env, agent, num_episodes=2000, print_interval=100):
     for episode in range(num_episodes):
         state, _ = env.reset()
         total_reward = 0
+        done = False
+        truncated = False
+        step = 0 
 
-        for step in range(agent.max_steps_per_episode):
-
+        #for step in range(agent.max_steps_per_episode):
+        while not done and not truncated:
             # 1. Select action (ε-greedy)
             action = agent.select_action(state, training=True)
 
@@ -289,9 +292,10 @@ def train_agent(env, agent, num_episodes=2000, print_interval=100):
 
             state = next_state
             total_reward += reward
+            step += 1
 
-            if done or truncated:
-                break
+            #if done or truncated:
+            #    break
         
         # Decay epsilon
         agent.decay_epsilon()
@@ -421,7 +425,7 @@ def main():
     """Main function"""
     # Parameters
     env_name = "Taxi-v3"
-    num_episodes = 6000
+    num_episodes = 2000
     num_test_episodes = 100
     
     # Create environment
