@@ -7,16 +7,7 @@ class Agent:
     
     def __init__(self, n_states, n_actions, gamma=0.99, 
                  epsilon=1.0, epsilon_decay=0.999, epsilon_min=0.01, alpha=0.8):
-        """
-        Args:
-            n_states: Number of states in the environment, for taxi v3 there are 500
-            n_actions: Number of available actions which is 6
-            gamma: Discount factor, used to balance the importance of future rewards compared to immediate ones
-            alpha: Learning rate, determines how much the Q-values are updated during learning, a value of 0.1 means that the Q-values are updated by 10% of the new information obtained from the reward and the next state
-            epsilon: Initial exploration rate, set to 1 to explore a lot at the beginning and decrease over time
-            epsilon_decay: Decay factor for epsilon, this is the rate at which epsilon decreases after each episode, used in the decay_epsilon function
-            epsilon_min: Minimum value of epsilon, a minimum value is kept to prevent it from becoming 0 and therefore never exploring again
-        """
+       
         
         self.n_states = n_states # 500
         self.n_actions = n_actions # 6 = south, north, west, east, pickup, dropoff
@@ -34,11 +25,11 @@ class Agent:
     
     def select_action(self, state, training=True):
 
-        if training and np.random.random() < self.epsilon: # the random number is between 0 and 1
-            return np.random.randint(self.n_actions) # if a random number is less than epsilon, explore
+        if training and np.random.random() < self.epsilon: 
+            return np.random.randint(self.n_actions) 
         else:
-            return np.argmax(self.Q[state]) # otherwise exploit current knowledge by choosing the action with the highest Q value which will provide the highest reward
-        # in both cases the indices of the actions (0-5) are returned because that's how they are encoded in the taxi v3 environment
+            return np.argmax(self.Q[state]) 
+        
     
     def update(self, state, action, reward, next_state):
 
@@ -48,11 +39,11 @@ class Agent:
     
     def decay_epsilon(self):
         
-        self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay) # decreases epsilon by multiplying it by the decay factor, but does not let it go below epsilon_min
+        self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay) 
     
     def get_greedy_action(self, state):
         
-        return np.argmax(self.Q[state]) # returns the action with the highest Q value for the given state
+        return np.argmax(self.Q[state]) 
 
 
 def train_agent(env, agent, num_episodes=10000, print_interval=1000):
@@ -62,19 +53,19 @@ def train_agent(env, agent, num_episodes=10000, print_interval=1000):
     
     print("Starting training...")
     
-    for episode in range(num_episodes): # each episode is a complete run from start to finish
+    for episode in range(num_episodes): 
         state, _ = env.reset()
         done = False
-        truncated = False # truncated is used for environments with step limits like taxi v3
+        truncated = False 
         total_reward = 0
         
-        while not done and not truncated: # done stands for objective reached, truncated for maximum steps reached
+        while not done and not truncated: 
             
             # Select action
             action = agent.select_action(state, training=True)
             
             # Execute action
-            next_state, reward, done, truncated, _ = env.step(action) # executes the action in the environment and receives the next state, the reward, and the episode end indicators
+            next_state, reward, done, truncated, _ = env.step(action)
             total_reward += reward
             
             # Update Q-table
@@ -99,11 +90,6 @@ def train_agent(env, agent, num_episodes=10000, print_interval=1000):
     print("\nTraining completed!")
     return rewards_history, epsilon_history
 
-    # this function is used to populate the Q-table. What it does is:
-    # for each episode it resets the environment and initializes the variables
-    # then for each step of the episode it selects an action using the epsilon-greedy policy
-    # executes the action in the environment obtaining the next state, the reward and the episode end indicators
-    # updates the Q-table using the Q-learning algorithm
 
 
 def evaluate_agent(env, agent, num_episodes=100):
@@ -114,7 +100,7 @@ def evaluate_agent(env, agent, num_episodes=100):
     for episode in range(num_episodes): 
         state, _ = env.reset()
         done = False
-        truncated = False # truncated is used for environments with step limits like taxi v3
+        truncated = False 
         total_reward = 0
         
         while not done and not truncated:   
@@ -238,7 +224,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# During training we have in the first 1000 episodes an average reward of approximately -160 -200, which is normal since the agent is still exploring the environment.
-# In episodes 2000 the important part happens, because the agent has learned the structure of the problem.
-# In subsequent episodes the average reward reaches the optimal policy with 7.3 - 7.5
-# This is because we give +20 reward when delivering the passenger and -1 for each step, so if we do 20 - 12/13 (steps of optimal policy) we get approximately 7.3 - 7.5.
+

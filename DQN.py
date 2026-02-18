@@ -168,7 +168,7 @@ class DQNAgent:
 
     def decay_epsilon(self):
         
-        self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay) # decreases epsilon by multiplying it by the decay factor, but does not let it go below epsilon_min
+        self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay) 
         
 
 def warmup(env, agent):
@@ -226,7 +226,7 @@ def train_agent(env, agent, num_episodes=2000, print_interval=100):
         truncated = False
         step = 0 
 
-        #for step in range(agent.max_steps_per_episode):
+        
         while not done and not truncated:
             # 1. Select action (ε-greedy)
             action = agent.select_action(state, training=True)
